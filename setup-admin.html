@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Setup Admin - ESTUDIOK</title>
+    <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js"></script>
+</head>
+<body>
+    <h1>Setup Admin User</h1>
+    <button onclick="setupAdmin()">Setup Admin</button>
+    <div id="status"></div>
+
+    <script>
+        const firebaseConfig = {
+            apiKey: "AIzaSyDkY37OLdt9W8vBdWcQi1Ivz0Tn_FaA2B4",
+            authDomain: "studiok-saas.firebaseapp.com",
+            projectId: "studiok-saas",
+            messagingSenderId: "134175965723",
+            appId: "1:134175965723:web:c1bcf1de6cc7abb1416ebe"
+        };
+
+        // Initialize Firebase
+        const app = firebase.initializeApp(firebaseConfig);
+        const db = firebase.firestore(app);
+        const auth = firebase.auth(app);
+
+        async function setupAdmin() {
+            const status = document.getElementById('status');
+            status.innerHTML = 'Please sign in first...';
+            
+            try {
+                // Sign in with email/password
+                const userCredential = await auth.signInWithEmailAndPassword(
+                    'almir.msfilho@hotmail.com', 
+                    prompt('Enter your password:')
+                );
+                
+                const user = userCredential.user;
+                status.innerHTML = 'Signed in successfully! Setting up admin...';
+                
+                // Create/update user document
+                const userRef = db.collection('users').doc(user.uid);
+                await userRef.set({
+                    uid: user.uid,
+                    email: user.email,
+                    name: user.displayName || 'Almir Filho',
+                    role: 'admin',
+                    createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+                    updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+                }, { merge: true });
+                
+                status.innerHTML = '✅ Admin setup completed successfully! You can now access the admin panel.';
+                
+            } catch (error) {
+                console.error('Error:', error);
+                status.innerHTML = '❌ Error: ' + error.message;
+            }
+        }
+    </script>
+</body>
+</html>
