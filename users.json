@@ -1,0 +1,22 @@
+{"users": [
+{
+  "localId": "8T89A4ygLfd0271U8lib5N5fLv52",
+  "email": "test@example.com",
+  "emailVerified": false,
+  "passwordHash": "LjXU1HXkqOZxx/cY5vrSXwoRZP6uqjgEkyZurd0KERZ5BVM6BuBgIE76f++PU0YOM65sYyM5XKZt1Ctqcs4YcQ==",
+  "salt": "RahgAQ2/G7D1Xg==",
+  "lastSignedInAt": "1775102203120",
+  "createdAt": "1775095611079",
+  "providerUserInfo": []
+},
+{
+  "localId": "rR8auYyDzeU257qHW4VS60q15Mg2",
+  "email": "almir.msfilho@hotmail.com",
+  "emailVerified": false,
+  "passwordHash": "ZktgcalMDdzVxRvJb7o17avKfcpf1YzBNPn5mnKeEV+4bYFu1v1luZZ1lpbuGsGKo/p5OHigUZ2scQQvvHIwmA==",
+  "salt": "dZjpm5Yj98T97g==",
+  "lastSignedInAt": "1775101984295",
+  "createdAt": "1775072376303",
+  "disabled": false,
+  "providerUserInfo": []
+}]}

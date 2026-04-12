@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Adicionar Projeto - Admin ESTUDIOK</title>
+    <style>
+        body { 
+            background: #0A0A0A; 
+            color: white; 
+            font-family: Arial, sans-serif; 
+            margin: 0; 
+            padding: 20px; 
+        }
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        .form-card {
+            background: #1A1A1A;
+            padding: 30px;
+            border-radius: 10px;
+            margin-top: 20px;
+        }
+        .form-group {
+            margin-bottom: 20px;
+        }
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: #ccc;
+        }
+        input, textarea, select {
+            width: 100%;
+            padding: 12px;
+            background: #2A2A2A;
+            border: 1px solid #444;
+            border-radius: 5px;
+            color: white;
+            font-size: 16px;
+        }
+        textarea {
+            min-height: 120px;
+            resize: vertical;
+        }
+        .btn {
+            background: #00D4FF;
+            color: black;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 5px;
+            font-weight: bold;
+            cursor: pointer;
+            width: 100%;
+            font-size: 16px;
+        }
+        .btn:hover {
+            opacity: 0.9;
+        }
+        .btn-secondary {
+            background: #2A2A2A;
+            color: #00D4FF;
+            margin-top: 10px;
+        }
+        .success {
+            background: #1A3A1A;
+            color: #4CAF50;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 20px 0;
+            display: none;
+        }
+        .error {
+            background: #3A1A1A;
+            color: #FF4444;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 20px 0;
+            display: none;
+        }
+        .image-preview {
+            margin: 20px 0;
+            text-align: center;
+        }
+        .image-preview img {
+            max-width: 100%;
+            max-height: 300px;
+            border-radius: 8px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>➕ Adicionar Projeto ao Portfólio</h1>
+        <p>Preencha os dados do projeto para adicionar ao portfólio público.</p>
+        
+        <div id="success-message" class="success">
+            ✅ Projeto adicionado com sucesso! Redirecionando em 3 segundos...
+        </div>
+        
+        <div id="error-message" class="error">
+            ❌ Erro ao adicionar projeto. Tente novamente.
+        </div>
+        
+        <div class="form-card">
+            <div class="image-preview" id="image-preview">
+                <p>Imagem aparecerá aqui</p>
+            </div>
+            
+            <form id="add-project-form">
+                <div class="form-group">
+                    <label for="title">Título do Projeto *</label>
+                    <input type="text" id="title" name="title" required placeholder="Ex: Sistema de Gestão Empresarial">
+                </div>
+                
+                <div class="form-group">
+                    <label for="category">Categoria *</label>
+                    <select id="category" name="category" required>
+                        <option value="">Selecione...</option>
+                        <option value="SaaS">SaaS (Software as a Service)</option>
+                        <option value="E-commerce">E-commerce</option>
+                        <option value="Site Institucional">Site Institucional</option>
+                        <option value="App Mobile">App Mobile</option>
+                        <option value="Landing Page">Landing Page</option>
+                        <option value="Sistema Web">Sistema Web</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="description">Descrição *</label>
+                    <textarea id="description" name="description" required placeholder="Descreva o projeto, tecnologias usadas, funcionalidades..."></textarea>
+                </div>
+                
+                <div class="form-group">
+                    <label for="image">URL da Imagem *</label>
+                    <input type="text" id="image" name="image" required placeholder="/portfolio/NOME-DA-IMAGEM.png">
+                    <small style="color: #888;">Ex: /portfolio/MENOSIMPOSTO.png</small>
+                </div>
+                
+                <div class="form-group">
+                    <label for="url">URL do Projeto (opcional)</label>
+                    <input type="url" id="url" name="url" placeholder="https://exemplo.com">
+                </div>
+                
+                <div class="form-group">
+                    <label for="client">Cliente (opcional)</label>
+                    <input type="text" id="client" name="client" placeholder="Nome do cliente">
+                </div>
+                
+                <div class="form-group">
+                    <label for="technologies">Tecnologias (opcional)</label>
+                    <input type="text" id="technologies" name="technologies" placeholder="React, Node.js, Firebase, Stripe...">
+                </div>
+                
+                <button type="submit" class="btn" id="submit-btn">✅ Adicionar Projeto</button>
+                <a href="/admin" class="btn btn-secondary">← Voltar ao Dashboard</a>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        const imageInput = document.getElementById('image');
+        const imagePreview = document.getElementById('image-preview');
+        
+        imageInput.addEventListener('input', function() {
+            const url = this.value.trim();
+            if (url) {
+                imagePreview.innerHTML = `<img src="${url}" alt="Pré-visualização">`;
+            } else {
+                imagePreview.innerHTML = '<p>Imagem aparecerá aqui</p>';
+            }
+        });
+        
+        document.getElementById('add-project-form').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const submitBtn = document.getElementById('submit-btn');
+            submitBtn.disabled = true;
+            submitBtn.textContent = 'Adicionando...';
+            
+            const successMessage = document.getElementById('success-message');
+            const errorMessage = document.getElementById('error-message');
+            
+            successMessage.style.display = 'none';
+            errorMessage.style.display = 'none';
+            
+            const formData = {
+                title: document.getElementById('title').value,
+                category: document.getElementById('category').value,
+                description: document.getElementById('description').value,
+                image: document.getElementById('image').value,
+                url: document.getElementById('url').value,
+                client: document.getElementById('client').value,
+                technologies: document.getElementById('technologies').value,
+                createdAt: new Date().toISOString()
+            };
+            
+            try {
+                const response = await fetch('/api/portfolio/add', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(formData)
+                });
+                
+                const result = await response.json();
+                
+                if (response.ok) {
+                    successMessage.style.display = 'block';
+                    setTimeout(() => {
+                        window.location.href = '/admin';
+                    }, 3000);
+                } else {
+                    errorMessage.textContent = result.error || 'Erro ao adicionar projeto';
+                    errorMessage.style.display = 'block';
+                }
+            } catch (error) {
+                errorMessage.textContent = 'Erro de conexão. Tente novamente.';
+                errorMessage.style.display = 'block';
+                console.error('Erro:', error);
+            } finally {
+                submitBtn.disabled = false;
+                submitBtn.textContent = '✅ Adicionar Projeto';
+            }
+        });
+    </script>
+</body>
+</html>

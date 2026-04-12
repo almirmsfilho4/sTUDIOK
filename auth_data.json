@@ -1,0 +1,11 @@
+{"users": [
+{
+  "localId": "rR8auYyDzeU257qHW4VS60q15Mg2",
+  "email": "almir.msfilho@hotmail.com",
+  "emailVerified": false,
+  "passwordHash": "caHh8wC2yxiijH5SZu4ByDKOxP5GKc5bZtde1PwHyrjCLq6LjsnFCseSyCfS0bJYTOBrcKibYax5Xvl0RNPzUw==",
+  "salt": "6N/iWYDDbTG0oQ==",
+  "lastSignedInAt": "1775090958528",
+  "createdAt": "1775072376303",
+  "providerUserInfo": []
+}]}

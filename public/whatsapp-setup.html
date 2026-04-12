@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Configurar WhatsApp Business - ESTUDIOK</title>
+    <style>
+        body { 
+            background: #0A0A0A; 
+            color: white; 
+            font-family: Arial, sans-serif; 
+            margin: 0; 
+            padding: 20px; 
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        .step {
+            background: #1A1A1A;
+            padding: 25px;
+            border-radius: 10px;
+            margin: 20px 0;
+            border-left: 5px solid #00D4FF;
+        }
+        .step-number {
+            background: #00D4FF;
+            color: black;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 20px;
+            margin-right: 15px;
+        }
+        .step-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        .step-title {
+            font-size: 1.5em;
+            font-weight: bold;
+        }
+        .code {
+            background: #2A2A2A;
+            padding: 15px;
+            border-radius: 5px;
+            font-family: monospace;
+            overflow-x: auto;
+            margin: 15px 0;
+        }
+        .important {
+            background: #3A1A1A;
+            border-left: 5px solid #FF4444;
+            padding: 15px;
+            margin: 15px 0;
+        }
+        .btn {
+            background: #00D4FF;
+            color: black;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 5px;
+            font-weight: bold;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+            margin: 10px 5px;
+        }
+        .btn:hover {
+            opacity: 0.9;
+        }
+        .btn-secondary {
+            background: #2A2A2A;
+            color: #00D4FF;
+            border: 1px solid #00D4FF;
+        }
+        .status {
+            padding: 10px;
+            border-radius: 5px;
+            margin: 10px 0;
+        }
+        .status-connected {
+            background: #1A3A1A;
+            color: #4CAF50;
+        }
+        .status-disconnected {
+            background: #3A1A1A;
+            color: #FF4444;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>📱 Configurar WhatsApp Business API</h1>
+        <p>Siga os passos abaixo para configurar o bot de atendimento automático do WhatsApp.</p>
+        
+        <div class="status status-disconnected" id="status-message">
+            ⚠️ WhatsApp Business API não configurado
+        </div>
+        
+        <div class="step">
+            <div class="step-header">
+                <div class="step-number">1</div>
+                <div class="step-title">Comprar Chip Dedicado</div>
+            </div>
+            <p>Para usar a API oficial do WhatsApp Business, você precisa de um chip dedicado:</p>
+            <ul>
+                <li><strong>Opção 1:</strong> Chip pré-pago TIM/Claro/Vivo (~R$ 50)</li>
+                <li><strong>Opção 2:</strong> Serviço de terceiros como Wavy, Zenvia (~R$ 100/mês)</li>
+                <li><strong>Opção 3:</strong> Meta Business API (gratuito para volume baixo)</li>
+            </ul>
+            <p><strong>Recomendação:</strong> Comece com chip pré-pago para testes.</p>
+        </div>
+        
+        <div class="step">
+            <div class="step-header">
+                <div class="step-number">2</div>
+                <div class="step-title">Criar Conta Meta Business</div>
+            </div>
+            <p>Acesse <a href="https://business.facebook.com" style="color: #00D4FF;">business.facebook.com</a> e:</p>
+            <ol>
+                <li>Criar uma conta Business</li>
+                <li>Adicionar WhatsApp como ferramenta</li>
+                <li>Verificar número do chip</li>
+            </ol>
+            <div class="important">
+                <strong>⚠️ IMPORTANTE:</strong> Use o número do chip dedicado para verificação.
+            </div>
+        </div>
+        
+        <div class="step">
+            <div class="step-header">
+                <div class="step-number">3</div>
+                <div class="step-title">Configurar Webhook no ESTUDIOK</div>
+            </div>
+            <p>URL do webhook já está pronta:</p>
+            <div class="code">
+                https://estudiok.com.br/api/webhooks/whatsapp
+            </div>
+            <p><strong>Token de verificação:</strong></p>
+            <div class="code">
+                estudiok_verify_2024
+            </div>
+            <p>No painel do Meta Business, cole essas informações na seção Webhooks.</p>
+        </div>
+        
+        <div class="step">
+            <div class="step-header">
+                <div class="step-number">4</div>
+                <div class="step-title">Configurar Credenciais no Vercel</div>
+            </div>
+            <p>Após obter as credenciais do WhatsApp Business, adicione ao Vercel:</p>
+            <div class="code">
+                WHATSAPP_ACCESS_TOKEN = seu_token_aqui<br>
+                WHATSAPP_PHONE_NUMBER_ID = seu_id_aqui
+            </div>
+            <p>Para adicionar no Vercel:</p>
+            <ol>
+                <li>Acesse: <a href="https://vercel.com/your-project/settings/environment-variables" style="color: #00D4FF;">Vercel Environment Variables</a></li>
+                <li>Adicione as duas variáveis acima</li>
+                <li>Redeploy o projeto</li>
+            </ol>
+        </div>
+        
+        <div class="step">
+            <div class="step-header">
+                <div class="step-number">5</div>
+                <div class="step-title">Testar o Bot</div>
+            </div>
+            <p>Após configurar tudo:</p>
+            <ol>
+                <li>Envie "oi" para o número do WhatsApp Business</li>
+                <li>O bot deve responder com menu interativo</li>
+                <li>Verifique os logs no painel admin</li>
+            </ol>
+            <button class="btn" onclick="testWebhook()">🔍 Testar Webhook WhatsApp</button>
+        </div>
+        
+        <div style="margin-top: 40px; text-align: center;">
+            <a href="/admin" class="btn btn-secondary">← Voltar ao Admin</a>
+            <a href="https://developers.facebook.com/docs/whatsapp/business-management-api" target="_blank" class="btn">📚 Documentação Oficial</a>
+        </div>
+    </div>
+
+    <script>
+        async function testWebhook() {
+            const status = document.getElementById('status-message');
+            status.textContent = 'Testando conexão...';
+            status.className = 'status';
+            
+            try {
+                const response = await fetch('/api/webhooks/whatsapp');
+                if (response.ok) {
+                    status.textContent = '✅ Webhook WhatsApp está funcionando!';
+                    status.className = 'status status-connected';
+                } else {
+                    status.textContent = '❌ Webhook não respondeu corretamente';
+                    status.className = 'status status-disconnected';
+                }
+            } catch (error) {
+                status.textContent = '❌ Erro ao testar webhook';
+                status.className = 'status status-disconnected';
+            }
+        }
+        
+        async function checkWhatsAppStatus() {
+            try {
+                const response = await fetch('/api/whatsapp/status');
+                const data = await response.json();
+                const status = document.getElementById('status-message');
+                
+                if (data.connected) {
+                    status.textContent = '✅ WhatsApp Business conectado!';
+                    status.className = 'status status-connected';
+                } else {
+                    status.textContent = '⚠️ WhatsApp Business não configurado';
+                    status.className = 'status status-disconnected';
+                }
+            } catch (error) {
+                console.error('Erro ao verificar status:', error);
+            }
+        }
+        
+        document.addEventListener('DOMContentLoaded', checkWhatsAppStatus);
+    </script>
+</body>
+</html>

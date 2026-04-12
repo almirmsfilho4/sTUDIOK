@@ -1,0 +1,97 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Helper function to check user role
+    function isAdmin() {
+      return request.auth != null && 
+             exists(/databases/$(database)/documents/users/$(request.auth.uid)) &&
+             get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'admin';
+    }
+    
+    // Users can only access their own data
+    match /users/{userId} {
+      allow read, write: if request.auth != null && request.auth.uid == userId;
+      allow read: if request.auth != null && isAdmin();
+      allow write: if request.auth != null && isAdmin();
+    }
+    
+    // Projects - users access their own projects, admin access all
+    match /projects/{projectId} {
+      allow read: if request.auth != null && 
+                   (resource.data.user_id == request.auth.uid || 
+                    isAdmin());
+      allow create: if request.auth != null || isAdmin();
+      allow update: if request.auth != null && 
+                     (resource.data.user_id == request.auth.uid || 
+                      isAdmin());
+      allow delete: if request.auth != null && isAdmin();
+    }
+    
+    // Quotes (Orçamentos) - anyone can create, but only auth users can read/update
+    match /quotes/{quoteId} {
+      allow read: if request.auth != null || resource.data.public == true || isAdmin();
+      allow create: if true; // Allow anonymous quote creation for lead generation
+      allow update: if request.auth != null || isAdmin();
+      allow delete: if isAdmin();
+    }
+    
+    // Messages - only project participants and admin
+    match /messages/{messageId} {
+      allow read: if request.auth != null && 
+                   (resource.data.user_id == request.auth.uid || 
+                    isAdmin());
+      allow write: if request.auth != null || isAdmin();
+    }
+    
+    // Files - only project participants and admin
+    match /files/{fileId} {
+      allow read: if request.auth != null && 
+                   (resource.data.user_id == request.auth.uid || 
+                    isAdmin());
+      allow write: if request.auth != null || isAdmin();
+    }
+    
+    // Support tickets - users access their own, admin access all
+    match /support_tickets/{ticketId} {
+      allow read: if request.auth != null && 
+                   (resource.data.userId == request.auth.uid || 
+                    isAdmin());
+      allow write: if request.auth != null && 
+                   (resource.data.userId == request.auth.uid || 
+                    isAdmin());
+    }
+    
+    // Portfolio collection - public read and write for testing
+    match /portfolio/{projectId} {
+      allow read, write: if true;
+    }
+    
+    // Admin dashboard collections
+    match /leads/{leadId} {
+      allow read: if request.auth != null && isAdmin();
+      allow write: if request.auth != null && isAdmin();
+    }
+    
+    match /analytics/{analyticsId} {
+      allow read: if request.auth != null && isAdmin();
+      allow write: if false; // Only via cloud functions
+    }
+    
+    match /subscriptions/{subscriptionId} {
+      allow read: if request.auth != null && 
+                   (resource.data.userId == request.auth.uid || 
+                    isAdmin());
+      allow write: if request.auth != null && isAdmin();
+    }
+    
+    match /transactions/{transactionId} {
+      allow read: if request.auth != null && isAdmin();
+      allow write: if false; // Only via cloud functions
+    }
+    
+    // Default rule for admin access to all collections
+    match /{collection}/{documentId} {
+      allow read, write: if request.auth != null && isAdmin();
+    }
+  }
+}

@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin ESTUDIOK</title>
+    <style>
+        body { 
+            background: #0A0A0A; 
+            color: white; 
+            font-family: Arial, sans-serif; 
+            margin: 0; 
+            padding: 20px; 
+        }
+        .card { 
+            background: #1A1A1A; 
+            padding: 20px; 
+            border-radius: 8px; 
+            margin: 10px 0; 
+        }
+        a { 
+            color: #00D4FF; 
+            text-decoration: none; 
+            display: block; 
+            padding: 10px; 
+        }
+        a:hover { 
+            background: #2A2A2A; 
+        }
+        .grid { 
+            display: grid; 
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); 
+            gap: 20px; 
+            margin: 20px 0; 
+        }
+        .btn-home {
+            background: #00D4FF;
+            color: black;
+            padding: 10px 20px;
+            border-radius: 5px;
+            display: inline-block;
+            text-decoration: none;
+            font-weight: bold;
+            margin-top: 30px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Admin ESTUDIOK</h1>
+    <p>Dashboard simplificado</p>
+    
+    <div id="content">
+        <div class="grid">
+            <div class="card">
+                <a href="/admin/leads">👥 Leads</a>
+                <p id="leads" style="color: #00D4FF; font-size: 2em; margin: 10px 0 0 0;">Carregando...</p>
+            </div>
+            <div class="card">
+                <a href="/admin/projects">📁 Projetos</a>
+                <p id="projects" style="color: green; font-size: 2em; margin: 10px 0 0 0;">Carregando...</p>
+            </div>
+            <div class="card">
+                <a href="/admin/financeiro">💰 Financeiro</a>
+                <p id="revenue" style="color: purple; font-size: 2em; margin: 10px 0 0 0;">Carregando...</p>
+            </div>
+            <div class="card">
+                <a href="/admin/portfolio">🎨 Portfólio</a>
+                <p id="conversions" style="color: orange; font-size: 2em; margin: 10px 0 0 0;">Carregando...</p>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        fetch('/api/dashboard/stats')
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('leads').textContent = data.leads.total;
+                document.getElementById('projects').textContent = data.projects.total;
+                document.getElementById('revenue').textContent = 'R$ ' + data.revenue.total.toLocaleString('pt-BR');
+                document.getElementById('conversions').textContent = data.conversions.rate + '%';
+            })
+            .catch(error => {
+                console.error('Erro ao carregar dados:', error);
+                document.getElementById('content').innerHTML = '<p style="color: red">Erro ao carregar dados do dashboard</p>';
+            });
+    </script>
+    
+    <div style="margin-top:30px;display:flex;gap:10px;flex-wrap:wrap;">
+        <a href="/" class="btn-home" style="background:#2A2A2A;color:#00D4FF;margin-right:10px">🏠 Ver Site Principal</a>
+        <a href="javascript:void(0)" onclick="showAddProjectForm()" class="btn-home" style="background:#00D4FF;color:black">➕ Adicionar Projeto</a>
+        <a href="javascript:void(0)" onclick="viewPortfolio()" class="btn-home" style="background:#7B2CBF;color:white">📁 Ver Portfólio</a>
+    </div>
+    
+    <div id="add-project-form" style="display:none;background:#1A1A1A;padding:30px;border-radius:10px;margin-top:30px;">
+        <h2 style="margin-top:0">➕ Adicionar Projeto ao Portfólio</h2>
+        <div class="form-group">
+            <label style="display:block;margin-bottom:8px;color:#ccc">Título do Projeto *</label>
+            <input type="text" id="project-title" placeholder="Ex: Sistema de Gestão Empresarial" style="width:100%;padding:12px;background:#2A2A2A;border:1px solid #444;border-radius:5px;color:white;font-size:16px;margin-bottom:15px;">
+        </div>
+        <div class="form-group">
+            <label style="display:block;margin-bottom:8px;color:#ccc">Categoria *</label>
+            <select id="project-category" style="width:100%;padding:12px;background:#2A2A2A;border:1px solid #444;border-radius:5px;color:white;font-size:16px;margin-bottom:15px;">
+                <option value="">Selecione...</option>
+                <option value="SaaS">SaaS (Software as a Service)</option>
+                <option value="E-commerce">E-commerce</option>
+                <option value="Site Institucional">Site Institucional</option>
+                <option value="App Mobile">App Mobile</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label style="display:block;margin-bottom:8px;color:#ccc">Descrição *</label>
+            <textarea id="project-description" placeholder="Descreva o projeto..." style="width:100%;padding:12px;background:#2A2A2A;border:1px solid #444;border-radius:5px;color:white;font-size:16px;min-height:100px;margin-bottom:15px;"></textarea>
+        </div>
+        <div class="form-group">
+            <label style="display:block;margin-bottom:8px;color:#ccc">URL da Imagem *</label>
+            <input type="text" id="project-image" placeholder="/portfolio/NOME.png" style="width:100%;padding:12px;background:#2A2A2A;border:1px solid #444;border-radius:5px;color:white;font-size:16px;margin-bottom:5px;">
+            <small style="color:#888">Ex: /portfolio/MENOSIMPOSTO.png</small>
+        </div>
+        <button onclick="addProject()" style="background:#00D4FF;color:black;padding:12px 24px;border:none;border-radius:5px;font-weight:bold;cursor:pointer;width:100%;font-size:16px;margin-top:10px;">✅ Adicionar Projeto</button>
+        <button onclick="hideAddProjectForm()" style="background:#2A2A2A;color:#00D4FF;padding:12px 24px;border:none;border-radius:5px;font-weight:bold;cursor:pointer;width:100%;font-size:16px;margin-top:10px;">❌ Cancelar</button>
+        <div id="add-project-result" style="margin-top:15px;padding:10px;border-radius:5px;display:none;"></div>
+    </div>
+    
+    <script>
+        function viewPortfolio() {
+            fetch('/api/portfolio/list')
+                .then(response => response.json())
+                .then(data => {
+                    if (data.length > 0) {
+                        let html = '<h3>📁 Portfólio (Últimos 5 Projetos)</h3><div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:20px;margin-top:20px;">';
+                        data.slice(0,5).forEach(project => {
+                            html += `<div style="background:#2A2A2A;padding:15px;border-radius:8px;"><h4 style="margin-top:0;color:#00D4FF">${project.title}</h4><p style="color:#ccc">${project.category}</p><p style="font-size:14px">${project.description.substring(0,100)}...</p><small style="color:#888">${new Date(project.createdAt).toLocaleDateString('pt-BR')}</small></div>`;
+                        });
+                        html += '</div>';
+                        
+                        const resultDiv = document.getElementById('add-project-result');
+                        resultDiv.style.display = 'block';
+                        resultDiv.style.background = '#1A1A1A';
+                        resultDiv.style.padding = '20px';
+                        resultDiv.style.borderRadius = '10px';
+                        resultDiv.innerHTML = html + '<button onclick="hideAddProjectForm()" style="margin-top:20px;background:#444;color:white;padding:10px 20px;border:none;border-radius:5px;">Fechar</button>';
+                    } else {
+                        showResult('📁 Nenhum projeto no portfólio ainda.', 'info');
+                    }
+                })
+                .catch(error => {
+                    console.error('Erro ao buscar portfólio:', error);
+                    showResult('❌ Erro ao carregar portfólio.', 'error');
+                });
+        }
+        
+        function showAddProjectForm() {
+            document.getElementById('add-project-form').style.display = 'block';
+            window.scrollTo({top: document.getElementById('add-project-form').offsetTop - 20, behavior: 'smooth'});
+        }
+        
+        function hideAddProjectForm() {
+            document.getElementById('add-project-form').style.display = 'none';
+            document.getElementById('add-project-result').style.display = 'none';
+        }
+        
+        async function addProject() {
+            const title = document.getElementById('project-title').value.trim();
+            const category = document.getElementById('project-category').value;
+            const description = document.getElementById('project-description').value.trim();
+            const image = document.getElementById('project-image').value.trim();
+            
+            if (!title || !category || !description || !image) {
+                showResult('❌ Preencha todos os campos obrigatórios!', 'error');
+                return;
+            }
+            
+            const resultDiv = document.getElementById('add-project-result');
+            resultDiv.style.display = 'block';
+            resultDiv.innerHTML = '<div style="background:#2A2A2A;padding:15px;border-radius:5px;text-align:center"><p>Adicionando projeto...</p></div>';
+            
+            const projectData = {
+                title,
+                category,
+                description,
+                image,
+                createdAt: new Date().toISOString()
+            };
+            
+            try {
+                const response = await fetch('/api/portfolio/add', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify(projectData)
+                });
+                
+                const result = await response.json();
+                
+                if (response.ok) {
+                    showResult('✅ Projeto adicionado com sucesso! Atualize a página para ver.', 'success');
+                    // Limpar formulário
+                    document.getElementById('project-title').value = '';
+                    document.getElementById('project-category').value = '';
+                    document.getElementById('project-description').value = '';
+                    document.getElementById('project-image').value = '';
+                    
+                    setTimeout(() => {
+                        hideAddProjectForm();
+                        // Atualizar contador de projetos
+                        fetch('/api/dashboard/stats')
+                            .then(r => r.json())
+                            .then(data => {
+                                document.getElementById('projects').textContent = data.projects.total;
+                            });
+                    }, 2000);
+                } else {
+                    showResult('❌ Erro: ' + (result.error || 'Erro ao adicionar projeto'), 'error');
+                }
+            } catch (error) {
+                showResult('❌ Erro de conexão. Tente novamente.', 'error');
+                console.error('Erro:', error);
+            }
+        }
+        
+        function showResult(message, type) {
+            const resultDiv = document.getElementById('add-project-result');
+            resultDiv.style.display = 'block';
+            resultDiv.style.background = type === 'success' ? '#1A3A1A' : '#3A1A1A';
+            resultDiv.style.color = type === 'success' ? '#4CAF50' : '#FF4444';
+            resultDiv.style.padding = '15px';
+            resultDiv.style.borderRadius = '5px';
+            resultDiv.innerHTML = `<p style="margin:0">${message}</p>`;
+        }
+    </script>
+</body>
+</html>

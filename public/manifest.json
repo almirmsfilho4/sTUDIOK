@@ -1,0 +1,41 @@
+{
+  "name": "ESTUDIOK - Criação de Sites, Apps e Sistemas",
+  "short_name": "ESTUDIOK",
+  "description": "Agência digital especializada em criação de sites, apps mobile e sistemas web sob medida. Seu site pronto em 48 horas!",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#0A0A0A",
+  "theme_color": "#00D4FF",
+  "orientation": "portrait-primary",
+  "categories": ["business", "productivity"],
+  "icons": [
+    {
+      "src": "/logo.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/logo.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Solicitar Orçamento",
+      "short_name": "Orçamento",
+      "description": "Peça um orçamento rápido",
+      "url": "/orcamento",
+      "icons": [{ "src": "/logo.png", "sizes": "96x96" }]
+    },
+    {
+      "name": "Ver Planos",
+      "short_name": "Planos",
+      "description": "Nossos planos de assinatura",
+      "url": "/planos",
+      "icons": [{ "src": "/logo.png", "sizes": "96x96" }]
+    }
+  ]
+}

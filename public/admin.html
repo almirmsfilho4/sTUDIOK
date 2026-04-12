@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Admin ESTUDIOK</title>
+<style>
+body { background: #0A0A0A; color: white; font-family: Arial, sans-serif; padding: 20px; }
+.card { background: #1A1A1A; padding: 20px; border-radius: 8px; margin: 10px 0; }
+.grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; }
+a { color: #00D4FF; text-decoration: none; display: block; padding: 10px; }
+a:hover { background: #2A2A2A; }
+.btn { background: #00D4FF; color: black; padding: 10px 20px; border-radius: 5px; display: inline-block; margin: 10px 0; }
+.error { color: #FF4444; }
+.loading { opacity: 0.5; }
+</style>
+</head>
+<body>
+<h1>Admin ESTUDIOK</h1>
+<div id="content" class="loading">
+  <p>Carregando dados...</p>
+</div>
+
+<script>
+async function loadStats() {
+  try {
+    const res = await fetch('/api/dashboard/stats');
+    if (!res.ok) throw new Error('Erro: ' + res.status);
+    const data = await res.json();
+    
+    document.getElementById('content').innerHTML = `
+      <div class="grid">
+        <div class="card">
+          <a href="/admin/leads">👥 Leads</a>
+          <p style="color:#00D4FF;font-size:2em;margin:10px 0 0 0;">${data.leads.total}</p>
+          <small>Mês: ${data.leads.thisMonth} (${data.leads.trend}%)</small>
+        </div>
+        <div class="card">
+          <a href="/admin/projects">📁 Projetos</a>
+          <p style="color:green;font-size:2em;margin:10px 0 0 0;">${data.projects.total}</p>
+          <small>Ativos: ${data.projects.active} | Concluídos: ${data.projects.completed}</small>
+        </div>
+        <div class="card">
+          <a href="/admin/financeiro">💰 Financeiro</a>
+          <p style="color:purple;font-size:2em;margin:10px 0 0 0;">R$ ${data.revenue.total.toLocaleString('pt-BR')}</p>
+          <small>Mês: R$ ${data.revenue.thisMonth.toLocaleString('pt-BR')}</small>
+        </div>
+        <div class="card">
+          <a href="/admin/portfolio">🎨 Portfólio</a>
+          <p style="color:orange;font-size:2em;margin:10px 0 0 0;">${data.conversions.rate}%</p>
+          <small>Taxa de conversão</small>
+        </div>
+      </div>
+      <div style="margin-top:20px;">
+        <button onclick="location.reload()" class="btn">🔄 Atualizar</button>
+        <a href="/public/add-project.html" class="btn" style="margin-left:10px;">➕ Novo Projeto</a>
+        <a href="/" class="btn" style="margin-left:10px;">🏠 Site</a>
+      </div>
+    `;
+    document.getElementById('content').classList.remove('loading');
+  } catch (e) {
+    document.getElementById('content').innerHTML = '<p class="error">Erro: ' + e.message + '</p><button onclick="location.reload()" class="btn">Tentar Novamente</button>';
+  }
+}
+loadStats();
+</script>
+</body>
+</html>

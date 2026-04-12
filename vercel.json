@@ -1,0 +1,33 @@
+{
+  "buildCommand": "npm run build",
+  "devCommand": "npm run dev",
+  "installCommand": "npm install",
+  "framework": "nextjs",
+  "outputDirectory": ".next",
+  "crons": [
+    {
+      "path": "/api/email/queue",
+      "schedule": "0 10 * * *"
+    },
+    {
+      "path": "/api/relatorios/semanal",
+      "schedule": "0 9 * * 1"
+    },
+    {
+      "path": "/api/relatorios/mensal",
+      "schedule": "0 8 1 * *"
+    },
+    {
+      "path": "/api/ai/content/auto",
+      "schedule": "0 6 * * *"
+    },
+    {
+      "path": "/api/ai/content/auto",
+      "schedule": "0 12 * * *"
+    },
+    {
+      "path": "/api/ai/content/auto",
+      "schedule": "0 18 * * *"
+    }
+  ]
+}
