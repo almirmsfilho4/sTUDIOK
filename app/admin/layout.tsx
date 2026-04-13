@@ -4,6 +4,8 @@ import { useEffect } from 'react';
 import { usePathname } from 'next/navigation';
 import Link from 'next/link';
 
+export const dynamic = 'force-dynamic';
+
 const adminMenu = [
   { name: 'Dashboard', href: '/admin/dashboard', icon: '📊' },
   { name: 'Projetos', href: '/admin/projects', icon: '📁' },
